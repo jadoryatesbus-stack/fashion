@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember House — Wood-fired dining, Kingston</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1b1815;
+    --charcoal-2:#231f1a;
+    --bone:#efe8dc;
+    --bone-dim:#c9bfae;
+    --ember:#c1602e;
+    --ember-bright:#d97a45;
+    --olive:#454a37;
+    --olive-light:#5c6249;
+    --gold:#a9863f;
+    --ink:#17140f;
+    --line: rgba(239,232,220,0.14);
+    --line-dark: rgba(23,20,15,0.12);
+    --maxw: 1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bone);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    line-height:1.08;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  button{font-family:inherit; cursor:pointer;}
+  :focus-visible{outline:2px solid var(--ember-bright); outline-offset:3px;}
+
+  /* ---------- NAV ---------- */
+  header.site-nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:22px 0;
+    transition:background .35s ease, padding .35s ease, box-shadow .35s ease;
+  }
+  header.site-nav .wrap{display:flex; align-items:center; justify-content:space-between;}
+  header.site-nav.scrolled{
+    background:var(--charcoal);
+    padding:14px 0;
+    box-shadow:0 1px 0 var(--line);
+  }
+  .logo{font-family:'Fraunces', serif; font-size:1.35rem; color:var(--bone); font-weight:500;}
+  nav.links{display:flex; gap:34px; align-items:center;}
+  nav.links a{color:var(--bone-dim); font-size:0.95rem; transition:color .2s;}
+  nav.links a:hover{color:var(--bone);}
+  .btn{
+    display:inline-block;
+    padding:11px 22px;
+    border-radius:2px;
+    font-size:0.92rem;
+    font-weight:500;
+    border:1px solid transparent;
+  }
+  .btn-ember{background:var(--ember); color:var(--bone);}
+  .btn-ember:hover{background:var(--ember-bright);}
+  .btn-outline{border-color:var(--bone-dim); color:var(--bone);}
+  .btn-outline:hover{border-color:var(--bone); background:rgba(239,232,220,0.06);}
+  .nav-toggle{display:none; background:none; border:none; color:var(--bone); font-size:1.6rem;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 75% 15%, rgba(193,96,46,0.16), transparent 55%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 42px),
+      var(--charcoal);
+    color:var(--bone);
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+  }
+  .hero .wrap{position:relative; z-index:2; padding-top:120px; padding-bottom:90px;}
+  .hero-tag{color:var(--ember-bright); font-size:1rem; margin-bottom:22px; max-width:420px;}
+  .hero h1{font-size:clamp(2.6rem, 6vw, 5rem); max-width:14ch; color:var(--bone);}
+  .hero p.lede{margin-top:26px; max-width:46ch; color:var(--bone-dim); font-size:1.1rem;}
+  .hero-ctas{display:flex; gap:16px; margin-top:40px; flex-wrap:wrap;}
+  .embers{position:absolute; inset:0; z-index:1; pointer-events:none;}
+  .ember-dot{
+    position:absolute; bottom:-10px; border-radius:50%;
+    background:var(--ember-bright);
+    box-shadow:0 0 10px 2px rgba(217,122,69,0.6);
+    animation:rise linear infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0); opacity:0;}
+    10%{opacity:0.9;}
+    100%{transform:translateY(-100vh) translateX(var(--drift,20px)); opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ember-dot{animation:none; display:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ---------- SECTION LABELS ---------- */
+  section{padding:110px 0;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head h2{font-size:clamp(1.9rem,3.4vw,2.6rem);}
+  .section-head p{margin-top:16px; color:#4a4438; font-size:1.05rem; max-width:52ch;}
+  .on-dark .section-head p{color:var(--bone-dim);}
+
+  /* ---------- STORY ---------- */
+  .story{background:var(--bone);}
+  .story .grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:72px; align-items:center;}
+  .story-copy p{color:#4a4438; margin:0 0 18px; max-width:48ch;}
+  .story-copy p:last-child{margin-bottom:0;}
+  .story-panel{
+    background:var(--olive);
+    aspect-ratio:4/5;
+    border-radius:2px;
+    position:relative;
+    overflow:hidden;
+  }
+  .story-panel svg{position:absolute; inset:0; width:100%; height:100%;}
+
+  /* ---------- MENU ---------- */
+  .menu{background:var(--charcoal); color:var(--bone);}
+  .menu-tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:46px; border-bottom:1px solid var(--line); padding-bottom:0;}
+  .menu-tab{
+    background:none; border:none; color:var(--bone-dim);
+    padding:12px 4px; margin-right:28px; font-size:1rem;
+    border-bottom:2px solid transparent; transition:color .2s, border-color .2s;
+  }
+  .menu-tab:hover{color:var(--bone);}
+  .menu-tab.active{color:var(--ember-bright); border-color:var(--ember-bright);}
+  .menu-panel{display:none;}
+  .menu-panel.active{display:block; animation:fadein .3s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .menu-list{display:grid; grid-template-columns:1fr 1fr; gap:36px 56px;}
+  .menu-item{border-bottom:1px solid var(--line); padding-bottom:20px;}
+  .menu-item-top{display:flex; align-items:baseline; gap:10px;}
+  .menu-item-top .name{font-family:'Fraunces', serif; font-size:1.18rem; white-space:nowrap;}
+  .menu-item-top .leader{flex:1; border-bottom:1px dotted rgba(239,232,220,0.28); transform:translateY(-4px);}
+  .menu-item-top .price{font-family:'Fraunces', serif; font-size:1.05rem; color:var(--ember-bright); white-space:nowrap;}
+  .menu-item .desc{margin-top:8px; color:var(--bone-dim); font-size:0.95rem; max-width:42ch;}
+  .menu-note{margin-top:44px; color:var(--bone-dim); font-size:0.9rem;}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{background:var(--bone);}
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-auto-rows:150px;
+    gap:14px;
+  }
+  .gtile{
+    position:relative; border-radius:2px; overflow:hidden;
+    display:flex; align-items:flex-end;
+    color:var(--bone);
+  }
+  .gtile span{
+    position:relative; z-index:2; padding:14px 16px; font-family:'Fraunces', serif; font-size:1rem;
+  }
+  .gtile::after{content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,0.45), transparent 60%); z-index:1;}
+  .gtile.tall{grid-row:span 2;}
+  .gtile.wide{grid-column:span 2;}
+
+  /* ---------- RESERVATIONS ---------- */
+  .reserve{background:var(--olive); color:var(--bone);}
+  .reserve .grid{display:grid; grid-template-columns:1fr 1fr; gap:72px;}
+  .reserve-info dl{display:grid; grid-template-columns:auto 1fr; gap:10px 20px; margin:26px 0 0;}
+  .reserve-info dt{color:var(--bone-dim); font-size:0.92rem;}
+  .reserve-info dd{margin:0; font-size:0.95rem;}
+  form.reserve-form{display:grid; gap:16px;}
+  .field{display:grid; gap:6px;}
+  .field label{font-size:0.86rem; color:var(--bone-dim);}
+  .field input, .field select{
+    background:rgba(239,232,220,0.08);
+    border:1px solid rgba(239,232,220,0.28);
+    color:var(--bone);
+    padding:12px 14px;
+    border-radius:2px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.96rem;
+  }
+  .field input::placeholder{color:rgba(239,232,220,0.4);}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .reserve-form button{margin-top:6px; align-self:start;}
+
+  /* ---------- REVIEWS ---------- */
+  .reviews{background:var(--bone);}
+  .review-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:40px;}
+  blockquote{margin:0; padding-top:22px; border-top:1px solid var(--line-dark);}
+  blockquote p{font-family:'Fraunces', serif; font-size:1.15rem; color:var(--ink); margin:0 0 16px; line-height:1.4;}
+  blockquote cite{font-style:normal; color:#6b634f; font-size:0.9rem;}
+
+  /* ---------- VISIT / FOOTER ---------- */
+  .visit{background:var(--charcoal); color:var(--bone);}
+  .visit .grid{display:grid; grid-template-columns:1fr 1fr; gap:72px;}
+  .hours-table{width:100%; border-collapse:collapse; margin-top:22px;}
+  .hours-table td{padding:9px 0; border-bottom:1px solid var(--line); font-size:0.95rem;}
+  .hours-table td:last-child{text-align:right; color:var(--bone-dim);}
+  .map-block{
+    background:var(--olive); aspect-ratio:4/3; border-radius:2px; position:relative; overflow:hidden;
+  }
+  .map-block svg{position:absolute; inset:0; width:100%; height:100%;}
+  footer{border-top:1px solid var(--line); margin-top:90px; padding-top:34px; padding-bottom:40px;}
+  footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;}
+  footer p{color:var(--bone-dim); font-size:0.85rem; margin:0;}
+  footer .socials{display:flex; gap:20px;}
+  footer .socials a{color:var(--bone-dim); font-size:0.85rem;}
+  footer .socials a:hover{color:var(--bone);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 880px){
+    nav.links{
+      position:fixed; top:0; right:0; bottom:0; width:min(78vw,320px);
+      background:var(--charcoal); flex-direction:column; align-items:flex-start;
+      padding:100px 30px 30px; gap:26px;
+      transform:translateX(100%); transition:transform .3s ease;
+    }
+    nav.links.open{transform:translateX(0);}
+    .nav-toggle{display:block;}
+    .story .grid, .reserve .grid, .visit .grid{grid-template-columns:1fr; gap:44px;}
+    .menu-list{grid-template-columns:1fr;}
+    .review-grid{grid-template-columns:1fr; gap:34px;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr); grid-auto-rows:130px;}
+    .field-row{grid-template-columns:1fr;}
+    section{padding:76px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav" id="siteNav">
+  <div class="wrap">
+    <a href="#top" class="logo">Ember House</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    <nav class="links" id="navLinks">
+      <a href="#story">Our story</a>
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Visit</a>
+      <a href="#reserve" class="btn btn-outline">Reserve a table</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="embers" id="embers"></div>
+  <div class="wrap">
+    <p class="hero-tag">Wood-fired dining · Kingston</p>
+    <h1>Everything here passes over an open flame.</h1>
+    <p class="lede">Ember House cooks with pimento wood, coal, and patience — pairing Jamaican ingredients with the technique of a Mediterranean hearth kitchen.</p>
+    <div class="hero-ctas">
+      <a href="#reserve" class="btn btn-ember">Reserve a table</a>
+      <a href="#menu" class="btn btn-outline">View the menu</a>
+    </div>
+  </div>
+</section>
+
+<section class="story on-light" id="story">
+  <div class="wrap">
+    <div class="grid">
+      <div class="story-copy">
+        <div class="section-head">
+          <h2>Built around one fire pit</h2>
+        </div>
+        <p>The kitchen has no gas line. Every dish — from the charred breadfruit to the whole snapper — is cooked over pimento wood and coal in a hearth built into the center of the dining room.</p>
+        <p>Our chefs trained across Kingston, Lisbon, and Beirut, and the menu reflects that: island produce, ackee, scotch bonnet, and callaloo, treated with the restraint of a coastal European table.</p>
+        <p>We work with three small farms in St. Elizabeth and a single fishing crew out of Port Royal. If it isn't in season, it isn't on the menu.</p>
+      </div>
+      <div class="story-panel" aria-hidden="true">
+        <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="500" fill="#454a37"/>
+          <g stroke="#a9863f" stroke-width="1.4" fill="none" opacity="0.55">
+            <path d="M60 460 Q 90 300 70 180 Q 55 90 100 40"/>
+            <path d="M100 460 Q 130 320 105 200 Q 90 110 140 50"/>
+            <ellipse cx="72" cy="150" rx="16" ry="9" transform="rotate(30 72 150)"/>
+            <ellipse cx="90" cy="200" rx="16" ry="9" transform="rotate(20 90 200)"/>
+            <ellipse cx="65" cy="260" rx="16" ry="9" transform="rotate(40 65 260)"/>
+            <ellipse cx="110" cy="150" rx="16" ry="9" transform="rotate(-10 110 150)"/>
+            <ellipse cx="128" cy="220" rx="16" ry="9" transform="rotate(15 128 220)"/>
+          </g>
+          <g fill="#c1602e" opacity="0.9">
+            <path d="M300 430 C280 400 285 370 305 355 C295 385 305 400 320 405 C330 380 320 355 300 335 C330 345 350 380 340 415 C336 430 320 440 300 430 Z"/>
+          </g>
+          <g stroke="#efe8dc" stroke-width="1" opacity="0.18">
+            <line x1="0" y1="80" x2="400" y2="80"/>
+            <line x1="0" y1="420" x2="400" y2="420"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap on-dark">
+    <div class="section-head">
+      <h2>From the hearth</h2>
+      <p>A short, seasonal menu that changes with what our farms and fishermen bring in each week.</p>
+    </div>
+
+    <div class="menu-tabs" id="menuTabs">
+      <button class="menu-tab active" data-tab="starters">Starters</button>
+      <button class="menu-tab" data-tab="fire">Wood-fired</button>
+      <button class="menu-tab" data-tab="sides">Sides</button>
+      <button class="menu-tab" data-tab="sweet">Desserts</button>
+      <button class="menu-tab" data-tab="drinks">Drinks</button>
+    </div>
+
+    <div class="menu-panel active" data-panel="starters">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Charred breadfruit, pimento oil</span><span class="leader"></span><span class="price">$1,450</span></div>
+          <p class="desc">Whole breadfruit roasted directly in the coals, split and finished with pimento-infused oil and sea salt.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Ackee tartlet, scotch bonnet honey</span><span class="leader"></span><span class="price">$1,600</span></div>
+          <p class="desc">A savory tartlet of stewed ackee and saltfish, glazed with a scotch bonnet and local honey reduction.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Smoked callaloo soup</span><span class="leader"></span><span class="price">$1,100</span></div>
+          <p class="desc">Callaloo simmered over open flame with coconut milk and smoked pork, served with cassava crisp.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Grilled octopus, callaloo chimichurri</span><span class="leader"></span><span class="price">$2,200</span></div>
+          <p class="desc">Port Royal octopus, char-grilled and rested, finished with a bright callaloo and lime chimichurri.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" data-panel="fire">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Whole snapper, coal-roasted</span><span class="leader"></span><span class="price">$3,400</span></div>
+          <p class="desc">Whole Port Royal snapper cooked directly on the coals, served with escovitch and bammy.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Jerk-spiced pork collar</span><span class="leader"></span><span class="price">$3,100</span></div>
+          <p class="desc">Slow-smoked over pimento wood for six hours, finished hot and fast over open coal.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Dry-aged goat chop</span><span class="leader"></span><span class="price">$3,800</span></div>
+          <p class="desc">St. Elizabeth goat, dry-aged twelve days, grilled over coal and rested with thyme butter.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Half chicken, scotch bonnet glaze</span><span class="leader"></span><span class="price">$2,600</span></div>
+          <p class="desc">Spatchcocked and grilled under a brick, basted with a scotch bonnet and citrus glaze.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" data-panel="sides">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Roasted plantain, brown sugar butter</span><span class="leader"></span><span class="price">$650</span></div>
+          <p class="desc">Ripe plantain roasted whole, finished with brown sugar butter and flaky salt.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Coal-fired festival</span><span class="leader"></span><span class="price">$550</span></div>
+          <p class="desc">Sweet cornmeal dumplings finished over the coals for a smoky crust.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Rice and pigeon peas</span><span class="leader"></span><span class="price">$600</span></div>
+          <p class="desc">Cooked in coconut milk with thyme and scotch bonnet, smoked over dying embers.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Charred okra, lime</span><span class="leader"></span><span class="price">$700</span></div>
+          <p class="desc">Whole okra blistered fast over high heat, dressed simply with lime and sea salt.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" data-panel="sweet">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Smoked chocolate tart</span><span class="leader"></span><span class="price">$950</span></div>
+          <p class="desc">Dark chocolate ganache smoked over pimento wood, set in a cassava shortcrust.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Grilled pineapple, rum caramel</span><span class="leader"></span><span class="price">$850</span></div>
+          <p class="desc">Pineapple charred over open flame, served warm with a dark rum caramel.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Coconut and lime sorbet</span><span class="leader"></span><span class="price">$700</span></div>
+          <p class="desc">House-made sorbet, bright and cold against the heat of the meal.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Cornmeal pudding, burnt sugar</span><span class="leader"></span><span class="price">$800</span></div>
+          <p class="desc">A traditional cornmeal pudding finished with a torched sugar crust.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" data-panel="drinks">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Smoked rum old fashioned</span><span class="leader"></span><span class="price">$1,200</span></div>
+          <p class="desc">Aged Jamaican rum, bitters, and a splash of pimento smoke captured under glass.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Sorrel spritz</span><span class="leader"></span><span class="price">$950</span></div>
+          <p class="desc">House sorrel, ginger, and sparkling wine, served long over ice.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Blue Mountain espresso</span><span class="leader"></span><span class="price">$500</span></div>
+          <p class="desc">Single-origin Blue Mountain coffee, pulled fresh to close the meal.</p>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-top"><span class="name">Lime and mint cooler</span><span class="leader"></span><span class="price">$450</span></div>
+          <p class="desc">Fresh lime, mint, and soda — the house non-alcoholic pour.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="menu-note">Menu changes weekly with the season. Please tell your server about any allergies before ordering.</p>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Inside Ember House</h2>
+      <p>The dining room, the hearth, and the dishes that come off it.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gtile tall" style="background:linear-gradient(160deg,#5c3420,#c1602e);"><span>The hearth</span></div>
+      <div class="gtile" style="background:linear-gradient(160deg,#3a3f2d,#5c6249);"><span>Dining room</span></div>
+      <div class="gtile wide" style="background:linear-gradient(160deg,#2a2620,#454a37);"><span>Whole snapper</span></div>
+      <div class="gtile" style="background:linear-gradient(160deg,#a9863f,#c1602e);"><span>Bar</span></div>
+      <div class="gtile" style="background:linear-gradient(160deg,#454a37,#2a2620);"><span>Jerk pork collar</span></div>
+      <div class="gtile tall" style="background:linear-gradient(160deg,#c1602e,#7a3418);"><span>Coal-fired festival</span></div>
+      <div class="gtile wide" style="background:linear-gradient(160deg,#5c6249,#2a2620);"><span>Farm produce</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="reserve" id="reserve">
+  <div class="wrap">
+    <div class="grid">
+      <div class="reserve-info">
+        <div class="section-head on-dark">
+          <h2>Reserve a table</h2>
+          <p>We hold the dining room to 40 covers a night so every dish comes straight off the fire.</p>
+        </div>
+        <dl>
+          <dt>Phone</dt><dd>(876) 555-0142</dd>
+          <dt>Email</dt><dd>reserve@emberhouse.jm</dd>
+          <dt>Address</dt><dd>14 Ocean Boulevard, Kingston</dd>
+          <dt>Large parties</dt><dd>Call ahead for groups over 8</dd>
+        </dl>
+      </div>
+      <form class="reserve-form" onsubmit="return handleReserve(event)">
+        <div class="field-row">
+          <div class="field">
+            <label for="rname">Name</label>
+            <input id="rname" type="text" placeholder="Your name" required>
+          </div>
+          <div class="field">
+            <label for="rphone">Phone</label>
+            <input id="rphone" type="tel" placeholder="(876) 000-0000" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="rdate">Date</label>
+            <input id="rdate" type="date" required>
+          </div>
+          <div class="field">
+            <label for="rtime">Time</label>
+            <input id="rtime" type="time" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="rparty">Party size</label>
+          <select id="rparty" required>
+            <option value="">Select</option>
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+            <option>5</option><option>6</option><option>7</option><option>8+</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-ember">Request reservation</button>
+        <p id="reserveMsg" style="display:none; color:var(--bone-dim); font-size:0.9rem; margin:4px 0 0;">Thank you — this is a demo form, so no reservation has actually been sent.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What guests say</h2>
+    </div>
+    <div class="review-grid">
+      <blockquote>
+        <p>The snapper alone is worth the trip — cooked whole on the coals and brought straight to the table.</p>
+        <cite>— Kingston Eats</cite>
+      </blockquote>
+      <blockquote>
+        <p>Every plate tastes like it was cooked ten minutes ago, because it was. The pork collar is unreal.</p>
+        <cite>— Talia R.</cite>
+      </blockquote>
+      <blockquote>
+        <p>Small room, big flavor. Book ahead — it fills up fast on weekends.</p>
+        <cite>— Marcus B.</cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <div class="section-head on-dark">
+          <h2>Visit us</h2>
+        </div>
+        <table class="hours-table">
+          <tr><td>Tuesday – Thursday</td><td>5:30pm – 10:00pm</td></tr>
+          <tr><td>Friday – Saturday</td><td>5:30pm – 11:00pm</td></tr>
+          <tr><td>Sunday</td><td>1:00pm – 9:00pm</td></tr>
+          <tr><td>Monday</td><td>Closed</td></tr>
+        </table>
+        <p style="margin-top:22px; color:var(--bone-dim);">14 Ocean Boulevard, Kingston, Jamaica</p>
+      </div>
+      <div class="map-block" aria-hidden="true">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#454a37"/>
+          <g stroke="#efe8dc" stroke-width="1" opacity="0.25">
+            <line x1="0" y1="60" x2="400" y2="60"/>
+            <line x1="0" y1="140" x2="400" y2="140"/>
+            <line x1="0" y1="220" x2="400" y2="220"/>
+            <line x1="90" y1="0" x2="90" y2="300"/>
+            <line x1="220" y1="0" x2="220" y2="300"/>
+            <line x1="320" y1="0" x2="320" y2="300"/>
+          </g>
+          <circle cx="220" cy="140" r="9" fill="#c1602e"/>
+          <path d="M220 100 C240 100 255 118 255 138 C255 165 220 195 220 195 C220 195 185 165 185 138 C185 118 200 100 220 100 Z" fill="#c1602e" opacity="0.9"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Ember House. Demo site.</p>
+    <div class="socials">
+      <a href="#">Instagram</a>
+      <a href="#">Facebook</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('siteNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Menu tabs
+  const tabs = document.querySelectorAll('.menu-tab');
+  const panels = document.querySelectorAll('.menu-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector('.menu-panel[data-panel="' + tab.dataset.tab + '"]').classList.add('active');
+    });
+  });
+
+  // Reservation form (demo only)
+  function handleReserve(e){
+    e.preventDefault();
+    document.getElementById('reserveMsg').style.display = 'block';
+    return false;
+  }
+
+  // Ember particles (respects reduced motion via CSS)
+  const emberContainer = document.getElementById('embers');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!prefersReduced){
+    for(let i=0;i<18;i++){
+      const dot = document.createElement('div');
+      dot.className = 'ember-dot';
+      const size = 2 + Math.random()*3;
+      dot.style.width = size+'px';
+      dot.style.height = size+'px';
+      dot.style.left = (Math.random()*100)+'%';
+      dot.style.setProperty('--drift', (Math.random()*60-30)+'px');
+      dot.style.animationDuration = (6+Math.random()*6)+'s';
+      dot.style.animationDelay = (Math.random()*8)+'s';
+      emberContainer.appendChild(dot);
+    }
+  }
+</script>
+
+</body>
+</html>
